@@ -72,6 +72,7 @@ function get_messages(){
   return $messages;
 }
 
+// ログインしているかどうかの判定
 function is_logined(){
   return get_session('user_id') !== '';
 }
