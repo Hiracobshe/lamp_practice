@@ -79,6 +79,33 @@ INSERT INTO `users` (`user_id`, `name`, `password`, `type`, `created`, `updated`
 (1, 'sampleuser', 'password', 2, '2019-08-07 01:17:12', '2019-08-07 01:17:12'),
 (4, 'admin', 'admin', 1, '2019-08-07 10:45:11', '2019-08-07 10:45:11');
 
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `detail`
+--
+
+CREATE TABLE `detail` (
+  `order_id` int(11) NOT NULL COMMENT '注文番号',
+  `item_id` int(11) NOT NULL COMMENT '商品番号',
+  `price` int(11) NOT NULL COMMENT '商品購入時の価格',
+  `number` int(11) NOT NULL COMMENT '購入数'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `history`
+--
+
+CREATE TABLE `history` (
+  `order_id` int(11) NOT NULL COMMENT '注文番号',
+  `user_id` int(11) NOT NULL COMMENT 'ユーザID',
+  `created` datetime NOT NULL COMMENT '購入日時',
+  `sum` int(11) NOT NULL COMMENT '合計金額'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 --
 -- ダンプしたテーブルのインデックス
 --
@@ -104,6 +131,18 @@ ALTER TABLE `users`
   ADD PRIMARY KEY (`user_id`);
 
 --
+-- テーブルのインデックス `detail`
+--
+ALTER TABLE `detail`
+  ADD PRIMARY KEY (`order_id`,`item_id`);
+
+--
+-- テーブルのインデックス `history`
+--
+ALTER TABLE `history`
+  ADD PRIMARY KEY (`order_id`);
+
+--
 -- ダンプしたテーブルのAUTO_INCREMENT
 --
 
@@ -124,6 +163,18 @@ ALTER TABLE `items`
 --
 ALTER TABLE `users`
   MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- テーブルのAUTO_INCREMENT `detail`
+--
+ALTER TABLE `detail`
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '注文番号';
+
+--
+-- テーブルのAUTO_INCREMENT `history`
+--
+ALTER TABLE `history`
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '注文番号';
 
 --
 -- ダンプしたテーブルの制約
