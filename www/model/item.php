@@ -116,6 +116,36 @@ function update_item_stock($db, $item_id, $stock){
   return execute_query($db, $sql, [$stock, $item_id]);
 }
 
+function insert_item_detail($db, $item_id, $price, $number) {
+  $sql = "
+    INSERT INTO
+      detail(
+        item_id,
+        price,
+        number
+      )
+    VALUES(?, ?, ?);
+  ";
+
+  return execute_query($db, $sql, [$item_id, $price, $number]); 
+}
+
+
+function insert_item_history($db, $user_id, $date, $sum) {
+  $sql = "
+    INSERT INTO
+      history(
+        user_id,
+        created,
+        sum
+      )
+    VALUES(?, ?, ?);
+  ";
+
+  return execute_query($db, $sql, [$user_id, $date, $sum]);  
+}
+
+
 function destroy_item($db, $item_id){
   $item = get_item($db, $item_id);
   if($item === false){
