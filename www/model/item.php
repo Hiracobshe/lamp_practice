@@ -116,18 +116,19 @@ function update_item_stock($db, $item_id, $stock){
   return execute_query($db, $sql, [$stock, $item_id]);
 }
 
-function insert_item_detail($db, $item_id, $price, $number) {
+function insert_item_detail($db, $order_id, $item_id, $price, $number) {
   $sql = "
     INSERT INTO
       detail(
+        order_id,
         item_id,
         price,
         number
       )
-    VALUES(?, ?, ?);
+    VALUES(?, ?, ?, ?);
   ";
 
-  return execute_query($db, $sql, [$item_id, $price, $number]); 
+  return execute_query($db, $sql, [$order_id, $item_id, $price, $number]); 
 }
 
 

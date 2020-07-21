@@ -122,9 +122,12 @@ function purchase_carts($db, $carts){
     ) === false) {
 
       set_error('履歴の登録に失敗しました。');
-      $db->rollback();
   }
   
+  $order_id = $db->lastInsertId();
+
+  var_dump($order_id);
+
   foreach($carts as $cart){
     if(update_item_stock(
         $db, 
@@ -133,24 +136,27 @@ function purchase_carts($db, $carts){
       ) === false){
 
       set_error($cart['name'] . 'の購入に失敗しました。');
-      $db->rollback();
     }
 
     if(insert_item_detail(
       $db,
+      $order_id,
       $cart['item_id'], 
       $cart['price'], 
       $cart['amount']
       ) === false) {
 
       set_error('商品明細の登録に失敗しました。');
-      $db->rollback();
     } 
   }
 
-  $db->commit();
-
   delete_user_carts($db, $carts[0]['user_id']);
+
+  if(has_error()) {
+    $db->rollback();
+  } else {
+    $db->commit();
+  }
 }
 
 function delete_user_carts($db, $user_id){
