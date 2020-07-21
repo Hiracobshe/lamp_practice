@@ -165,12 +165,6 @@ ALTER TABLE `users`
   MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- テーブルのAUTO_INCREMENT `detail`
---
-ALTER TABLE `detail`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '注文番号';
-
---
 -- テーブルのAUTO_INCREMENT `history`
 --
 ALTER TABLE `history`

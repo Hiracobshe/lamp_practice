@@ -109,17 +109,54 @@ function purchase_carts($db, $carts){
   if(validate_cart_purchase($carts) === false){
     return false;
   }
+
+  $date = date('Y-m-d H:i:s');
+  
+  $db->beginTransaction();
+
+  if(insert_item_history(
+    $db, 
+    $carts[0]['user_id'], 
+    $date, 
+    sum_carts($carts)
+    ) === false) {
+
+      set_error('履歴の登録に失敗しました。');
+  }
+  
+  $order_id = $db->lastInsertId();
+
+  var_dump($order_id);
+
   foreach($carts as $cart){
     if(update_item_stock(
         $db, 
         $cart['item_id'], 
         $cart['stock'] - $cart['amount']
       ) === false){
+
       set_error($cart['name'] . 'の購入に失敗しました。');
     }
+
+    if(insert_item_detail(
+      $db,
+      $order_id,
+      $cart['item_id'], 
+      $cart['price'], 
+      $cart['amount']
+      ) === false) {
+
+      set_error('商品明細の登録に失敗しました。');
+    } 
   }
-  
+
   delete_user_carts($db, $carts[0]['user_id']);
+
+  if(has_error()) {
+    $db->rollback();
+  } else {
+    $db->commit();
+  }
 }
 
 function delete_user_carts($db, $user_id){
