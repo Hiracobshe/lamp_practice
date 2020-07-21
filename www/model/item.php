@@ -51,6 +51,37 @@ function get_open_items($db){
   return get_items($db, true);
 }
 
+
+function get_history($db, $user_id = null, $is_open = false) {
+  $sql = '
+    SELECT
+      order_id,
+      user_id,
+      created,
+      sum
+    FROM
+      history
+  ';
+  if($is_open === true){
+    $sql .= '
+      WHERE user_id = ' . $user_id .'
+    ';
+  }  
+
+  return fetch_all_query($db, $sql);
+}
+
+
+function get_all_history($db) {
+
+  return get_history($db);
+}
+
+function get_open_history($db, $user_id) {
+
+  return get_history($db, $user_id, true);
+}
+
 function regist_item($db, $name, $price, $stock, $status, $image){
   $filename = get_upload_filename($image);
   if(validate_item($name, $price, $stock, $filename, $status) === false){

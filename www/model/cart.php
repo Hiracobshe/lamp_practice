@@ -126,8 +126,6 @@ function purchase_carts($db, $carts){
   
   $order_id = $db->lastInsertId();
 
-  var_dump($order_id);
-
   foreach($carts as $cart){
     if(update_item_stock(
         $db, 
