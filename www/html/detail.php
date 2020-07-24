@@ -10,16 +10,19 @@ if (is_logined() === false) {
     redirect_to(LOGIN_URL);
 }
 
+var_dump($_GET);
+
 $db = get_db_connect();
 $user = get_login_user($db);
-
-var_dump($user['type']);
+$order_id = get_get('order_id');
+$date     = get_get('created');
+$sum      = get_get('sum');
 
 // 管理者かどうかの判定
 if (is_admin($user)) {
-    $history = get_history($db, $user['type']);
+    $display = get_display($db, $order_id);
 } else {
-    $history = get_history($db, $user['type'], $user['user_id']);
+    $display = get_display($db, $order_id, $user[0]['user_id']);
 }
 
-include_once VIEW_PATH . 'history_view.php';
+include_once VIEW_PATH . 'detail_view.php';

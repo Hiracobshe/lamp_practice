@@ -52,17 +52,16 @@ function get_open_items($db){
 }
 
 
-function get_history($db, $user_id = null, $is_open = false) {
+function get_history($db, $type, $user_id = null) {
   $sql = '
     SELECT
-      order_id,
-      user_id,
-      created,
-      sum
+      history.order_id,
+      history.created,
+      history.sum
     FROM
       history
   ';
-  if($is_open === true){
+  if($type === 2){
     $sql .= '
       WHERE user_id = ' . $user_id .'
     ';
@@ -72,15 +71,27 @@ function get_history($db, $user_id = null, $is_open = false) {
 }
 
 
-function get_all_history($db) {
+function get_display($db, $order_id, $user_id = null) {
+  $sql = '
+    SELECT
+      items.name,
+      detail.price,
+      detail.number
+    FROM
+      detail
+    INNER JOIN items
+    ON         items.item_id = detail.item_id
+    WHERE      detail.order_id = ' . $order_id . '
+  ';
+  if($user_id !== null){
+    $sql .= '
+      AND user_id = ' . $user_id .'
+    ';
+  }  
 
-  return get_history($db);
+  return fetch_all_query($db, $sql);
 }
 
-function get_open_history($db, $user_id) {
-
-  return get_history($db, $user_id, true);
-}
 
 function regist_item($db, $name, $price, $stock, $status, $image){
   $filename = get_upload_filename($image);

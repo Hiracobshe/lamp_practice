@@ -12,6 +12,14 @@
         <li class="nav-item">
           <a class="nav-link" href="<?php print(LOGOUT_URL);?>">ログアウト</a>
         </li>
+        <!-- // 購入履歴 -->
+        <li class="nav-item">
+          <!-- GETメソッドでデータ送信 -->
+          <form method="get" enctype="multipart/form-data" action="./history.php">
+            <a class="nav-link" href="<?php print(HISTORY_URL) . '?user_id=' . $user['user_id']; ?>">購入履歴</a>
+            <input type="hidden" name="user_id" value="<?php print $user['user_id']; ?>">
+          </form>
+        </li>
         <?php if(is_admin($user)){ ?>
           <li class="nav-item">
             <a class="nav-link" href="<?php print(ADMIN_URL);?>">管理</a>
