@@ -52,7 +52,8 @@ function get_open_items($db){
 }
 
 
-function get_history($db, $type, $user_id = null) {
+function get_history($db, $user_id = null) {
+  $params = array();
   $sql = '
     SELECT
       history.order_id,
@@ -61,17 +62,19 @@ function get_history($db, $type, $user_id = null) {
     FROM
       history
   ';
-  if($type === 2){
+  if($user_id !== null){
+    $params[] = $user_id;
     $sql .= '
-      WHERE user_id = ' . $user_id .'
+      WHERE user_id = ?
     ';
   }  
 
-  return fetch_all_query($db, $sql);
+  return fetch_all_query($db, $sql, $params);
 }
 
 
 function get_display($db, $order_id, $user_id = null) {
+  $params = array($order_id);
   $sql = '
     SELECT
       items.name,
@@ -81,15 +84,19 @@ function get_display($db, $order_id, $user_id = null) {
       detail
     INNER JOIN items
     ON         items.item_id = detail.item_id
-    WHERE      detail.order_id = ' . $order_id . '
+    WHERE      detail.order_id = ?
   ';
   if($user_id !== null){
+    array_push($params, $order_id, $user_id);
     $sql .= '
-      AND user_id = ' . $user_id .'
+      AND exists(SELECT * 
+                FROM history 
+                WHERE order_id = ?
+                AND   user_id = ?)
     ';
   }  
 
-  return fetch_all_query($db, $sql);
+  return fetch_all_query($db, $sql, $params);
 }
 
 
