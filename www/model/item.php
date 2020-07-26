@@ -51,6 +51,55 @@ function get_open_items($db){
   return get_items($db, true);
 }
 
+
+function get_history($db, $user_id = null) {
+  $params = array();
+  $sql = '
+    SELECT
+      history.order_id,
+      history.created,
+      history.sum
+    FROM
+      history
+  ';
+  if($user_id !== null){
+    $params[] = $user_id;
+    $sql .= '
+      WHERE user_id = ?
+    ';
+  }  
+
+  return fetch_all_query($db, $sql, $params);
+}
+
+
+function get_display($db, $order_id, $user_id = null) {
+  $params = array($order_id);
+  $sql = '
+    SELECT
+      items.name,
+      detail.price,
+      detail.number
+    FROM
+      detail
+    INNER JOIN items
+    ON         items.item_id = detail.item_id
+    WHERE      detail.order_id = ?
+  ';
+  if($user_id !== null){
+    array_push($params, $order_id, $user_id);
+    $sql .= '
+      AND exists(SELECT * 
+                FROM history 
+                WHERE order_id = ?
+                AND   user_id = ?)
+    ';
+  }  
+
+  return fetch_all_query($db, $sql, $params);
+}
+
+
 function regist_item($db, $name, $price, $stock, $status, $image){
   $filename = get_upload_filename($image);
   if(validate_item($name, $price, $stock, $filename, $status) === false){
