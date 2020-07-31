@@ -13,7 +13,7 @@
   ?>
 
   <div class="container">
-    <h1>商品管理(全<?php print $count;?>件中<?php print $from_page + 1; ?>-<?php print $to_page; ?>件目を表示)</h1>
+    <h1>商品管理(全<?php print $count;?>件中<?php print $f_position + 1; ?>-<?php print $t_position; ?>件目を表示)</h1>
 
     <?php include VIEW_PATH . 'templates/messages.php'; ?>
 
@@ -102,24 +102,15 @@
           <?php if ($prev_page === 0) { ?>
             ←前のページへ
           <?php } else { ?>
-            <form method="post" enctype="multipart/form-data" action="./admin.php">
-              <input type="submit" value="←前のページへ">
-              <input type="hidden" name="page" value="<?php print h($page - 1); ?>">
-            </form>
+            <a class="btn btn-secondary" href="<?php print './admin.php?page=' . $prev_page; ?>">←前のページへ</a> 
           <?php } ?>
         </td>
         <?php for ($lp1 = 1; $lp1 <= $total_page; $lp1++) { ?>
           <td>
             <?php if ($lp1 === (int)$page) { ?>
-              <form method="post" action="admin.php">
-                <input type="submit" value="<?php print $lp1; ?>" class="btn  btn-danger">
-                <input type="hidden" name="page" value="<?php print(h($lp1)); ?>">
-              </form>
+               <a class="btn  btn-danger" href="<?php print './admin.php?page=' . $lp1; ?>"><?php print $lp1; ?></a>
             <?php } else { ?>
-              <form method="post" action="admin.php">
-                <input type="submit" value="<?php print $lp1; ?>" class="btn btn-secondary">
-                <input type="hidden" name="page" value="<?php print(h($lp1)); ?>">
-              </form>
+              <a class="btn btn-secondary" href="<?php print './admin.php?page=' . $lp1; ?>"><?php print $lp1; ?></a>        
             <?php } ?>
           </td>
         <?php } ?>
@@ -127,10 +118,7 @@
           <?php if ($next_page === 0) { ?>
             次のページへ→
           <?php } else { ?>
-            <form method="post" enctype="multipart/form-data" action="./admin.php">
-              <input type="submit" value="次のページへ→">
-              <input type="hidden" name="page" value="<?php print h($page + 1); ?>">
-            </form>
+            <a class="btn btn-secondary" href="<?php print './admin.php?page=' . $next_page; ?>">次のページへ→</a>
           <?php } ?>
         </td>
       </table>
