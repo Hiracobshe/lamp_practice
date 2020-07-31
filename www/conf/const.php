@@ -53,3 +53,6 @@ define('PERMITTED_IMAGE_TYPES', array(
   IMAGETYPE_JPEG => 'jpg',
   IMAGETYPE_PNG => 'png',
 ));
+
+define('MAX_ITEM_PER_PAGE_ADMIN', 8);
+define('MAX_ITEM_PER_PAGE_INDEX', 8);
